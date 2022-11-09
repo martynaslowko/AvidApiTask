@@ -9,8 +9,8 @@ import java.util.Map;
 public class JsonRepository {
     private Map<String, Folder> map;
 
-    public JsonRepository() throws IOException {
-        byte[] jsonData = Files.readAllBytes(Paths.get("src/data/data.json"));
+    public JsonRepository(byte[] bytes) throws IOException {
+        byte[] jsonData = bytes;
         ObjectMapper objectMapper = new ObjectMapper();
         setMap(objectMapper.readValue(jsonData, Map.class));
     }
