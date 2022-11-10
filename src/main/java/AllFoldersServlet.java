@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class FolderServlet extends HttpServlet{
+public class AllFoldersServlet extends HttpServlet{
     private Map<String, Folder> repository;
 
     @Override
@@ -26,12 +26,46 @@ public class FolderServlet extends HttpServlet{
                     .toPath());
             repository = new JsonRepository(data).getMap();
         }
+
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter out = response.getWriter();
 
+        Integer limit = null;
+        Integer skip = null;
+        if (request.getParameterMap().containsKey("limit")) {
+            try {
+                limit = Integer.parseInt(request.getParameter("limit"));
+            } catch (Exception ex) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getStatus();
+                return;
+            }
+        }
+        if (request.getParameterMap().containsKey("skip")) {
+            try {
+                skip = Integer.parseInt(request.getParameter("skip"));
+                if (limit != null && skip > limit) throw new IOException("Skip value over limit");
+                if (skip > repository.size()) throw new IOException("Skip value over repository size");
+                if (skip < 0) throw new IOException("Skip value under 0");
+            } catch (Exception ex) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getStatus();
+                return;
+            }
+        }
+
         Map<String, ArrayList<Map<String, Object>>> results = new LinkedHashMap<>();
         ArrayList<Map<String, Object>> folders = new ArrayList<>();
+        int counter = 0;
         for (Map.Entry<String, Folder> entry : repository.entrySet()){
+            if (request.getParameterMap().containsKey("search") &&
+                    !entry.getKey().contains(request.getParameter("search")))
+                continue;
+            if (limit != null && limit == counter)
+                break;
+            counter++;
+            if (skip != null && skip > counter)
+                continue;
             Map<String, Object> details = new HashMap<>();
             details.put("path", entry.getKey());
             details.put("id", repository.get(entry.getKey()).getId());

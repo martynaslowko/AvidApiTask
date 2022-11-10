@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
     <servlet>
-        <servlet-name>FolderServlet</servlet-name>
-        <servlet-class>FolderServlet</servlet-class>
+        <servlet-name>AllFoldersServlet</servlet-name>
+        <servlet-class>AllFoldersServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>FolderServlet</servlet-name>
-        <url-pattern>/folders</url-pattern>
+        <servlet-name>AllFoldersServlet</servlet-name>
+        <url-pattern>/all/*</url-pattern>
     </servlet-mapping>
 </web-app>
