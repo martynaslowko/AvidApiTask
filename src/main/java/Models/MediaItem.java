@@ -8,6 +8,7 @@ public class MediaItem {
     private String mobId;
     private boolean online;
     private String type;
+    private String filePath;
 
     public String getEssenceType() {
         return essenceType;
@@ -63,5 +64,13 @@ public class MediaItem {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 }

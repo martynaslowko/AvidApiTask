@@ -1,5 +1,4 @@
 import Models.Folder;
-import Models.Result;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.ServletException;
@@ -10,11 +9,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class FolderServlet extends HttpServlet{
-    private LinkedHashMap<String, Folder> repository;
+    private Map<String, Folder> repository;
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -25,16 +26,20 @@ public class FolderServlet extends HttpServlet{
                     .toPath());
             repository = new JsonRepository(data).getMap();
         }
-        ObjectMapper objectMapper = new ObjectMapper();
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter out = response.getWriter();
-        Map<String, Result> results = null;
-        for (int i = 0; i < repository.size(); i++){
-            String path = repository.keySet().toArray()[i].toString();
-            Folder folder = repository.get(path);
-            Result result = new Result(folder.getId(), path);
-            results.put("result", result);
+
+        Map<String, ArrayList<Map<String, Object>>> results = new LinkedHashMap<>();
+        ArrayList<Map<String, Object>> folders = new ArrayList<>();
+        for (Map.Entry<String, Folder> entry : repository.entrySet()){
+            Map<String, Object> details = new HashMap<>();
+            details.put("path", entry.getKey());
+            details.put("id", repository.get(entry.getKey()).getId());
+            folders.add(details);
         }
+        results.put("results", folders);
+
+        ObjectMapper objectMapper = new ObjectMapper();
         out.print(objectMapper.writeValueAsString(results));
         out.flush();
     }

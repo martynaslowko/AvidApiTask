@@ -1,5 +1,7 @@
 package Models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 
 public class Asset {
@@ -7,6 +9,7 @@ public class Asset {
     private Base base;
     private String mobId;
     private Common common;
+    @JsonProperty("media-items")
     private ArrayList<MediaItem> mediaItems;
 
     public String getMobId() {
