@@ -7,6 +7,7 @@
         <element id="directory" name="classes">
           <element id="module-output" name="AvidApiTask" />
           <element id="jpa-descriptors" facet="AvidApiTask/jpa/JPA" />
+          <element id="module-output" name="AvidAPITask" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.13.4.2" />
@@ -15,6 +16,7 @@
           <element id="library" level="project" name="Maven: javax.servlet:javax.servlet-api:4.0.1" />
         </element>
       </element>
+      <element id="javaee-facet-resources" facet="AvidAPITask/web/Web" />
     </root>
   </artifact>
 </component>

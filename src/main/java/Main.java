@@ -10,6 +10,8 @@ public class Main {
         JsonRepository repository = new JsonRepository(Files.readAllBytes(Paths.get("web/WEB-INF/data.json")));
         for (Map.Entry<String, Folder> entry : repository.getMap().entrySet()){
             System.out.println(entry.getKey());
+            Folder folder = entry.getValue();
+            System.out.println(folder);
         }
     }
 }
