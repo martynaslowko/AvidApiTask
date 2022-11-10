@@ -32,26 +32,22 @@ public class AllFoldersServlet extends HttpServlet{
 
         Integer limit = null;
         Integer skip = null;
-        if (request.getParameterMap().containsKey("limit")) {
-            try {
+
+        try {
+            if (request.getParameterMap().containsKey("limit")) {
                 limit = Integer.parseInt(request.getParameter("limit"));
-            } catch (Exception ex) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.getStatus();
-                return;
+                if (limit < 0) throw new IOException("Limit value under 0");
             }
-        }
-        if (request.getParameterMap().containsKey("skip")) {
-            try {
+            if (request.getParameterMap().containsKey("skip")){
                 skip = Integer.parseInt(request.getParameter("skip"));
-                if (limit != null && skip > limit) throw new IOException("Skip value over limit");
+                if (limit != null && skip >= limit) throw new IOException("Skip value over/equals limit");
                 if (skip > repository.size()) throw new IOException("Skip value over repository size");
                 if (skip < 0) throw new IOException("Skip value under 0");
-            } catch (Exception ex) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.getStatus();
-                return;
             }
+        } catch (Exception ex) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getStatus();
+            return;
         }
 
         Map<String, ArrayList<Map<String, Object>>> results = new LinkedHashMap<>();
