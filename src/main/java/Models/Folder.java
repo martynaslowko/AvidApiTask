@@ -6,6 +6,13 @@ public class Folder {
     private int id;
     private ArrayList<Asset> assets;
 
+    public Folder(){}
+
+    public Folder(Folder folder) {
+        id = folder.getId();
+        assets = folder.getAssets();
+    }
+
     public int getId() {
         return id;
     }

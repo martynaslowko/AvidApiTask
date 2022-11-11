@@ -1,0 +1,231 @@
+{
+	"info": {
+		"_postman_id": "329ce54b-b29b-4d62-ab9e-f3fce9ad894b",
+		"name": "AvidAPITask",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24317748"
+	},
+	"item": [
+		{
+			"name": "AllFolders",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/avid/folders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"avid",
+						"folders"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "4",
+							"disabled": true
+						},
+						{
+							"key": "skip",
+							"value": "2",
+							"disabled": true
+						},
+						{
+							"key": "search",
+							"value": "Demo",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AllFoldersNull",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/avid/folders?limit=0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"avid",
+						"folders"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "0"
+						},
+						{
+							"key": "skip",
+							"value": "0",
+							"disabled": true
+						},
+						{
+							"key": "search",
+							"value": "trolo",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AllFoldersBadRequest",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/avid/folders?limit=2&skip=4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"avid",
+						"folders"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "2"
+						},
+						{
+							"key": "skip",
+							"value": "4"
+						},
+						{
+							"key": "search",
+							"value": "trolo",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FolderDetails",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/avid/folders/%2F%2Ftest-path%2FCloudUX1%2Fproj1%2Fproj1+Bin.avb",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"avid",
+						"folders",
+						"%2F%2Ftest-path%2FCloudUX1%2Fproj1%2Fproj1+Bin.avb"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "2",
+							"disabled": true
+						},
+						{
+							"key": "skip",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "type",
+							"value": "sequence",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FolderDetailsNotFound",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/avid/folders/test/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"avid",
+						"folders",
+						"test",
+						""
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "skip",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "type",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FolderDetailsBadRequest",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/avid/folders/%2F%2Ftest-path%2FCloudUX1%2Fproj1%2Fproj1+Bin.avb?limit=2&skip=4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"avid",
+						"folders",
+						"%2F%2Ftest-path%2FCloudUX1%2Fproj1%2Fproj1+Bin.avb"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "2"
+						},
+						{
+							"key": "skip",
+							"value": "4"
+						},
+						{
+							"key": "type",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
