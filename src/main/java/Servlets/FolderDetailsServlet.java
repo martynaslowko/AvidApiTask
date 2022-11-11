@@ -23,8 +23,52 @@ public class FolderDetailsServlet extends HttpServlet {
     private final ArrayList<String> availableTypes =
             new ArrayList<>(Arrays.asList("filemob", "masterclip", "subclip", "sequence", "group"));
 
+    private Integer limit = null;
+    private Integer skip = null;
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        initiateRepository();
+        response.setContentType("application/json; charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        String URL = request.getRequestURL().toString();
+        String file = URL.substring(URL.indexOf("folders/")+"folders/".length());
+        String decodedPath = URLDecoder.decode(file, StandardCharsets.ISO_8859_1);
+        Folder folder = repository.get(decodedPath);
+        if (folder == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+        ArrayList<Asset> assets = folder.getAssets();
+        if (request.getParameterMap().containsKey("type")) {
+            if (!availableTypes.contains(request.getParameter("type")))
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            assets.removeIf(asset -> !Objects.equals(asset.getBase().getType(), request.getParameter("type")));
+        }
+        if (!validateParameters(request))
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        if (!(skip == null && limit == null)) {
+            int counter = 0;
+            ArrayList<Asset> assetsCopy = new ArrayList<>();
+            for (Asset asset : assets) {
+                if (skip != null && skip != counter) {
+                    counter++;
+                    continue;
+                }
+                if (limit != null && limit == assetsCopy.size())
+                    break;
+                assetsCopy.add(asset);
+            }
+            assets = assetsCopy;
+        }
+        folder.setAssets(assets);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        out.print(objectMapper.writeValueAsString(folder));
+        out.flush();
+    }
+
+    private void initiateRepository() throws IOException {
         if (repository == null){
             byte[] data = Files.readAllBytes(new File(getServletContext()
                     .getResource("WEB-INF/data.json")
@@ -32,24 +76,22 @@ public class FolderDetailsServlet extends HttpServlet {
                     .toPath());
             repository = new JsonRepository(data).getMap();
         }
+    }
 
-        response.setContentType("application/json; charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        String URL = request.getRequestURL().toString();
-        String file = URL.substring(URL.indexOf("folders/")+"folders/".length());
-        String decodedPath = URLDecoder.decode(file, StandardCharsets.ISO_8859_1);
-        Folder folder = repository.get(decodedPath);
-        if (folder == null) response.sendError(HttpServletResponse.SC_NOT_FOUND);
-        else if (request.getParameterMap().containsKey("type")) {
-            if (!availableTypes.contains(request.getParameter("type")))
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            ArrayList<Asset> assets = folder.getAssets();
-            assets.removeIf(asset -> !Objects.equals(asset.getBase().getType(), request.getParameter("type")));
-            folder.setAssets(assets);
+    private boolean validateParameters(HttpServletRequest request) {
+        try {
+            if (request.getParameterMap().containsKey("limit")) {
+                limit = Integer.parseInt(request.getParameter("limit"));
+                if (limit < 0) throw new IOException("Limit value under 0");
+            }
+            if (request.getParameterMap().containsKey("skip")){
+                skip = Integer.parseInt(request.getParameter("skip"));
+                if (limit != null && skip >= limit) throw new IOException("Skip value over/equals limit");
+                if (skip < 0) throw new IOException("Skip value under 0");
+            }
+        } catch (Exception ex) {
+            return false;
         }
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        out.print(objectMapper.writeValueAsString(folder));
-        out.flush();
+        return true;
     }
 }
