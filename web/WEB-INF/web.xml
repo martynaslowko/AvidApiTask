@@ -5,11 +5,21 @@
          version="4.0">
     <servlet>
         <servlet-name>AllFoldersServlet</servlet-name>
-        <servlet-class>AllFoldersServlet</servlet-class>
+        <servlet-class>Servlets.AllFoldersServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>AllFoldersServlet</servlet-name>
-        <url-pattern>/all/*</url-pattern>
+        <url-pattern>/folders</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>FolderDetailsServlet</servlet-name>
+        <servlet-class>Servlets.FolderDetailsServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>FolderDetailsServlet</servlet-name>
+        <url-pattern>/folders/*</url-pattern>
     </servlet-mapping>
 </web-app>

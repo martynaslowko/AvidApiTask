@@ -1,4 +1,7 @@
+package Servlets;
+
 import Models.Folder;
+import Repository.JsonRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.ServletException;
@@ -45,8 +48,7 @@ public class AllFoldersServlet extends HttpServlet{
                 if (skip < 0) throw new IOException("Skip value under 0");
             }
         } catch (Exception ex) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getStatus();
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
 

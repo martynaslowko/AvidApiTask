@@ -1,7 +1,9 @@
+package Repository;
+
 import Models.Folder;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -11,7 +13,7 @@ public class JsonRepository {
 
     public JsonRepository(byte[] bytes) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JSR310Module());
+        objectMapper.registerModule(new JavaTimeModule());
         setMap(objectMapper.readValue(bytes, new TypeReference<LinkedHashMap<String, Folder>>(){}));
     }
 
